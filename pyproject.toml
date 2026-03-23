@@ -1,1 +1,13 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
 
+[project]
+name = "ml-pipeline-production-style"
+version = "0.1.0"
+description = "Production-style machine learning pipeline"
+authors = [
+  { name="Baharath Bathula" }
+]
+readme = "README.md"
+requires-python = ">=3.10"
