@@ -1,9 +1,12 @@
 import pandas as pd
+
 from src.components.data_ingestion import DataIngestion
+from src.components.data_validation import DataValidation
 from src.components.data_transformation import DataTransformation
 from src.components.model_trainer import ModelTrainer
 from src.utils.common import read_yaml
 from src.utils.logger import logger
+
 
 class TrainingPipeline:
     def __init__(self, config_path="configs/config.yaml"):
@@ -16,6 +19,11 @@ class TrainingPipeline:
         train_path, test_path = ingestion.initiate_data_ingestion()
 
         train_df = pd.read_csv(train_path)
+
+        validator = DataValidation(required_columns=train_df.columns.tolist())
+        validator.validate(train_path)
+        validator.validate(test_path)
+
         target_col = self.config["data"]["target_column"]
 
         transformation = DataTransformation()
@@ -24,6 +32,6 @@ class TrainingPipeline:
         trainer = ModelTrainer()
         metrics = trainer.initiate_model_trainer(train_path, test_path, preprocessor)
 
-        logger.info(f"Training pipeline completed. Metrics: {metrics}")
+        logger.info("Training pipeline completed successfully")
         print("Training completed successfully")
         print(metrics)
