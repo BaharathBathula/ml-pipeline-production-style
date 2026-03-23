@@ -1,10 +1,10 @@
 # Machine Learning Pipeline (Production Style)
 
-A production-style end-to-end machine learning pipeline project built with Python, FastAPI, scikit-learn, MLflow, Docker, and GitHub Actions.
+A production-style end-to-end machine learning pipeline built with Python, scikit-learn, FastAPI, MLflow, Docker, and GitHub Actions.
 
 ## Overview
 
-This project demonstrates how to design and deploy a modular machine learning pipeline suitable for real-world environments. It covers the full lifecycle:
+This project demonstrates how to design a modular ML pipeline for real-world production use cases. It includes:
 
 - Data ingestion
 - Data validation
@@ -12,24 +12,39 @@ This project demonstrates how to design and deploy a modular machine learning pi
 - Model training
 - Model evaluation
 - Model packaging
-- Inference API deployment
-- CI/CD automation
+- Real-time inference API
+- Docker support
+- CI/CD workflows
+- Unit tests
+
+## Use Case
+
+Customer Churn Prediction
 
 ## Tech Stack
 
 - Python
-- scikit-learn
 - pandas
 - numpy
+- scikit-learn
 - FastAPI
 - Uvicorn
 - MLflow
 - Docker
 - GitHub Actions
+- Pytest
+- Joblib
 - PyYAML
-- pytest
 
-## Project Architecture
+## Architecture
 
-```text
-Raw Data -> Validation -> Transformation -> Training -> Evaluation -> Model Artifact -> FastAPI Inference
+```mermaid
+flowchart LR
+    A[Raw Data] --> B[Data Ingestion]
+    B --> C[Data Validation]
+    C --> D[Data Transformation]
+    D --> E[Model Training]
+    E --> F[Model Evaluation]
+    F --> G[Model Artifact Storage]
+    G --> H[FastAPI Inference Service]
+    H --> I[Prediction Response]
