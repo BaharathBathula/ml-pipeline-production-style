@@ -1,24 +1,42 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-import pandas as pd
-from src.utils.common import load_object
+from typing import Any, Dict
+
+from src.pipelines.prediction_pipeline import PredictionPipeline
 
 app = FastAPI(title="ML Pipeline Production API")
 
-artifact = load_object("artifacts/models/model.pkl")
-model = artifact["model"]
-preprocessor = artifact["preprocessor"]
+prediction_pipeline = None
+try:
+    prediction_pipeline = PredictionPipeline()
+except Exception:
+    prediction_pipeline = None
+
 
 class PredictionRequest(BaseModel):
-    features: dict
+    features: Dict[str, Any]
+
 
 @app.get("/")
 def home():
     return {"message": "ML Pipeline API is running"}
 
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
+
 @app.post("/predict")
 def predict(request: PredictionRequest):
-    input_df = pd.DataFrame([request.features])
-    transformed = preprocessor.transform(input_df)
-    prediction = model.predict(transformed)[0]
-    return {"prediction": int(prediction) if str(prediction).isdigit() else str(prediction)}
+    global prediction_pipeline
+
+    if prediction_pipeline is None:
+        prediction_pipeline = PredictionPipeline()
+
+    prediction = prediction_pipeline.predict(request.features)
+
+    if str(prediction).isdigit():
+        prediction = int(prediction)
+
+    return {"prediction": prediction}
