@@ -4,7 +4,7 @@ data:
   raw_data_path: data/raw/customer_churn.csv
   train_path: data/processed/train.csv
   test_path: data/processed/test.csv
-  target_column: churn
+  target_column: Churn
 
 model:
   random_state: 42
